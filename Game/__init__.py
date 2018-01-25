@@ -95,12 +95,12 @@ class Game:
                     await client.send_message(i,options)
 
                     response = await client.wait_for_message(author=i)
-                    if self.serverName in response.content or self.serverName.lower() in response.content:
-                            if "cards" in response.content or "Cards" in response.content:
+                    if self.serverName.lower() in response.content.lower():
+                            if "cards" in response.content.lower():
                                 await self.checkCards(i,client,channel)
-                            if "black" in response.content or "Black" in response.content:
+                            if "black" in response.content.lower():
                                 await client.send_message(i,"{} , Pick {}".format(self.currentCard["text"],self.currentCard["pick"]))
-                            elif "submit" in response.content or "Submit" in response.content:
+                            elif "submit" in response.content.lower():
                                 resp = response.content.split()
                                 if len(resp[-1]) > 0:
                                     await self.submit(resp[2:],client,i)
@@ -126,10 +126,10 @@ class Game:
 
        """if the votes are tied, rince and repeat"""
        winners = max(contestants, key=contestants.get)
-       print(winners)
-       for i in winners:
-           await client.send_message(channel,"A Point goes to {}".format(i))
-           self.players[i].points += 1
+       for i in contestants.keys():
+           if contestants[i] >= contestants[winners]:
+            await client.send_message(channel,"A Point goes to {}".format(i))
+            self.players[i].points += 1
 
 
     async def vote(self,client,channel):
@@ -150,8 +150,8 @@ class Game:
                 await client.send_message(i,"{} Its your time to vote!".format(i.mention))
                 await client.send_message(i, "Vote with Vote <Number>")
                 result = await client.wait_for_message(author=i)
-                if self.serverName in result.content or self.serverName.lower() in result.content:
-                    if "vote" in result.content or "Vote" in result.content:
+                if self.serverName.lower() in result.content.lower():
+                    if "vote" in result.content.lower():
                         break
             result = result.content.split()[2:]
             for i, x in zip(self.players, range(len(self.players))):
@@ -181,7 +181,7 @@ class Game:
                 if len(x) < self.currentCard["pick"]:
                     await client.send_message(channel, "Please enter another card you want to submit:")
                     x = await client.wait_for_message(author=channel)
-                    x_prime.append(int(x))
+                    x_prime.append(int(x.content))
 
         while (len(x_prime)+1) < self.currentCard["pick"]:
             print(len(x_prime))
@@ -190,19 +190,19 @@ class Game:
                 if x == "":
                         await client.send_message(channel, "Please enter another card you want to submit:")
                         x = await client.wait_for_message(author=channel)
-                        x = x.split()
+                        x = x.content.split()
                         x_prime = x[0] if len(x) == 1 else [x_prime.append(i) for i in x]
                 else:
                     if len(x) < self.currentCard["pick"]:
                         await client.send_message(channel, "Please enter another card you want to submit:")
                         x = await client.wait_for_message(author=channel)
-                        x = x.split()
+                        x = x.content.split()
                         x_prime = x[0] if len(x) == 1 else [x_prime.append(i) for i in x]
             else:
                 if len(x)< self.currentCard["pick"]:
                     await client.send_message(channel, "Please enter another card you want to submit:")
                     x = await client.wait_for_message(author=channel)
-                    x = x.split()
+                    x = x.content.split()
                     x_prime = x[0] if len(x) == 1 else [x_prime.append(i) for i in x]
                 else:
                     for i in x:
