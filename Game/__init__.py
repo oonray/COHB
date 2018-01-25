@@ -78,62 +78,66 @@ class Game:
            while True:
                     options = """
                     Hello {}!
-                    You can talk to me using {}.
-                    My options are: Cards, Submit <number>
+                    My options are: "Cards" or "Submit" followed by a <number>
                         Cards: Shows cards
                         Submit: Sends the numbered card to me
-                    """.format(i.mention,client.user.mention)
+                    """.format(i.mention)
                     await client.send_message(i,options)
                     response = await client.wait_for_message(author=i)
-                    if "cards" in response.content:
+                    if "cards" in response.content or "Cards" in response.content:
                         await self.checkCards(i,client,channel)
-                    elif "Submit" in response.content:
+                    elif "submit" in response.content or "Submit" in response.content:
                         resp = response.content.split()
-                        if int(resp[-1]) > 0:
-                            await self.submit(int(resp[1:]),client,1)
-                        break
+                        if len(resp[-1]) > 0:
+                            await self.submit(resp[1:],client,i)
+                            break
 
-       for i in range(len(self.playerNames)):
+       for i,x in zip(self.players,range(len(self.players))):
              card = self.currentCard["text"]
-
-             out = "{}: {} :".format(i,self.playerNames[i])
-             print(out)
-
+             out = "{}: {} :".format(x,i.mention)
+             await client.send_message(channel,out)
              if re.search("_:",card) != None:
-                 for n in self.submitted[self.playerNames[i]]["cards"]:
+                 for n in self.submitted[i]["cards"]:
                     card = re.sub("_:",n,card,1)
-                 print(card)
+                 await client.send_message(channel,card)
              else:
-                 print("{} : {}".format(card,self.submitted[self.playerNames[i]]["cards"][0]))
+                 await client.send_message(channel,"{} : {}".format(card,self.submitted[i]["cards"][0]))
 
        """Vote starts"""
 
-       contestants = self.vote()
+       contestants = await self.vote(client,channel)
 
        """if the votes are tied, rince and repeat"""
        while max(contestants.values()) <= 1:
-           print("Cannot Be a tie!")
-           contestants = self.vote()
+           await client.send_message(channel,"Cannot Be a tie!")
+           contestants = await self.vote(client,channel)
 
        winner = max(contestants, key=contestants.get)
-       print("The point goes to {}".format(winner))
+       await client.send_message(channel,"The point goes to {}".format(winner))
        self.players[winner].points += 1
 
 
     async def vote(self,client,channel):
         """Mke sure all votes are zero"""
-        for i in self.playerNames:
-            self.submitted[self.playerNames[i]]["votes"] = 0
+        for i in self.players:
+            self.submitted[i]["votes"] = 0
 
         """Let the voting begin"""
-        for i in self.playerNames:
+        for i in self.players:
             await client.send_message(channel,"+-------------------------------------+")
-            out = """{}'s turn to Vote.""".format(i)
+            out = """{}'s turn to Vote.""".format(i.mention)
             await client.send_message(channel,out)
-            await client.send_message(i,"{} Its your time to vote!".format(i.mention))
-            result = await client.wait_for_message(author=i)
-            result = result.split()
-            self.submitted[self.playerNames[int(result[0])]]["votes"] += 1
+            result = None
+            while True:
+                await client.send_message(i,"{} Its your time to vote!".format(i.mention))
+                await client.send_message(i, "Vote with Vote <Number>")
+                result = await client.wait_for_message(author=i)
+                if "vote" in result.content or "Vote" in result.content:
+                    break
+            result = result.content.split()[1:]
+            for i, x in zip(self.players, range(len(self.players))):
+                if x == int(result[-1]):
+                    self.submitted[i]["votes"] += 1
 
         """OH hamsund"""
         contestants = {}
@@ -142,6 +146,7 @@ class Game:
         return contestants
 
     async def submit(self,x,client,channel):
+        print(x)
         x_prime = []
         cards = []
         """

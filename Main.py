@@ -43,27 +43,34 @@ async def on_message(message):
             await client.send_message(message.channel,"Added: \n{}".format(message.author.mention))
 
         if "start" in message.content:
-            await changeStatus("Playing Cards Against Humanity!")
             channel = message.channel
-            await client.send_message(message.channel, "+-------------------------------------+")
-            await client.send_message(channel,"Starting game with:")
-            for i in players:
-                    await client.send_message(channel,i.mention)
-            game = Game(players)
-            while True:
-                await client.send_message(message.channel, """+-------------------------------------+
-                   Do you want to:_?
-                          1: Start a new round
-                          2: Exit
-                """)
-                response = await client.wait_for_message()
-                if "1" in response.content:
-                    await game.round(client,channel)
-                elif "2" in response.content:
-                    game = ""
-                    break
-
-
+            if len(players) > 2:
+                await client.send_message(message.channel, "+-------------------------------------+")
+                await client.send_message(channel, "Too few players: join with 'c! join'")
+            else:
+                await changeStatus("Playing Cards Against Humanity!")
+                await client.send_message(message.channel, "+-------------------------------------+")
+                await client.send_message(channel,"Starting game with:")
+                for i in players:
+                        await client.send_message(channel,i.mention)
+                game = Game(players)
+                while True:
+                    await client.send_message(message.channel, """+-------------------------------------+
+                       Do you want to:_?
+                              1: Start a new round
+                              2: Leader board
+                              3: Exit
+                    """)
+                    response = await client.wait_for_message(channel=channel)
+                    if "1" in response.content:
+                        await game.round(client,channel)
+                    elif "2" in response.content:
+                        await client.send_message(message.channel, "+-------------------------------------+")
+                        for i in game.players:
+                            await client.send_message(message.channel, "{}:{}".format(i.mention,i.points))
+                    elif "3" in response.content:
+                        game = ""
+                        break
 
 
         if "card" in message.content:
