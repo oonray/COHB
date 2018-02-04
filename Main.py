@@ -42,7 +42,7 @@ async def on_ready():
     except:
         Servers = {}
 
-    await client.send_message("404046560322781188", """
+    await client.send_message(client.get_channel("404046560322781188"), """
             |+-----------------------------------------------------------------------+|    
             $|    Oy! Ten thousand years will give you such a crick in the neck.|$
             $|    WOW!! Does it feel good to be outta there.                                 |$
