@@ -45,13 +45,17 @@ async def changeStatus(status):
 @client.event
 async def on_ready():
     await changeStatus("Waiting for players to Join!")
-    for i in channel:
-        await client.send_message(client.get_channel(i), """
-                |+-----------------------------------------------------------------------+|    
-                $|    Oy! Ten thousand years will give you such a crick in the neck.|$
-                $|    WOW!! Does it feel good to be outta there.                                 |$
-                |+-----------------------------------------------------------------------+|
-                """)
+    try:
+        for i in channel:
+            await client.send_message(client.get_channel(i), """
+                    |+-----------------------------------------------------------------------+|    
+                    $|    Oy! Ten thousand years will give you such a crick in the neck.|$
+                    $|    WOW!! Does it feel good to be outta there.                                 |$
+                    |+-----------------------------------------------------------------------+|
+                    """)
+    except Exception as e:
+        error_log(str(e))
+
 @client.event
 async def on_message(message):
 
