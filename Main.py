@@ -36,20 +36,20 @@ async def changeStatus(status):
 @client.event
 async def on_ready():
     await changeStatus("Waiting for players to Join!")
-        try:
-            with open("servers.bak","r+") as file:
+    try:
+        with open("servers.bak","r+") as file:
                 Servers = pickle.loads(file)
+    except:
+        Servers = {}
 
-            await client.send_message("404046560322781188", """
+    await client.send_message("404046560322781188", """
             |+-----------------------------------------------------------------------+|    
             $|    Oy! Ten thousand years will give you such a crick in the neck.|$
             $|    WOW!! Does it feel good to be outta there.                                 |$
             |+-----------------------------------------------------------------------+|
             """)
-        except:
-            Servers = {}
 
-        for i in Servers:
+    for i in Servers:
             if i.channel not in channel:
                 await client.send_message(i.channel,"""
     |+-----------------------------------------------------------------------+|    
@@ -65,7 +65,7 @@ async def on_message(message):
     global game
 
 
-        if message.server.id not in Servers.keys():
+    if message.server.id not in Servers.keys():
                 Servers[message.server.id] = Game_Server({
                 "id": message.server.id,
                 "channel": message.channel,
@@ -75,7 +75,7 @@ async def on_message(message):
                 DA.Update_Servers(Servers) #Requires Dark Arts Expansion#4000
                 DA.DarkArt(message) #Requires Dark Arts Expansion#4000
 
-        if message.content.lower().startswith("c!"):
+    if message.content.lower().startswith("c!"):
             everyone = client.get_server(message.server.id).roles[0]
             server = message.server
             if "join" in message.content.lower():
