@@ -35,26 +35,31 @@ async def changeStatus(status):
 
 @client.event
 async def on_ready():
-    await changeStatus("Waiting for players to Join!")
-    with open("servers.bak","r+") as file:
-        Servers = pickle.loads(file)
+    try:
+        await changeStatus("Waiting for players to Join!")
+        with open("servers.bak","r+") as file:
+            Servers = pickle.loads(file)
 
-    await client.send_message("404046560322781188", """
+        await client.send_message("404046560322781188", """
+        |+-----------------------------------------------------------------------+|    
+        $|    Oy! Ten thousand years will give you such a crick in the neck.|$
+        $|    WOW!! Does it feel good to be outta there.                                 |$
+        |+-----------------------------------------------------------------------+|
+        """)
+
+
+        for i in Servers:
+            if i.channel not in channel:
+                await client.send_message(i.channel,"""
     |+-----------------------------------------------------------------------+|    
     $|    Oy! Ten thousand years will give you such a crick in the neck.|$
     $|    WOW!! Does it feel good to be outta there.                                 |$
     |+-----------------------------------------------------------------------+|
     """)
-
-
-    for i in Servers:
-        if i.channel not in channel:
-            await client.send_message(i.channel,"""
-|+-----------------------------------------------------------------------+|    
-$|    Oy! Ten thousand years will give you such a crick in the neck.|$
-$|    WOW!! Does it feel good to be outta there.                                 |$
-|+-----------------------------------------------------------------------+|
-""")
+    except Exception as e:
+        with open("error.log", "a") as file:
+            file.write("-" * 50)
+            file.write(e)
 
 
 @client.event
