@@ -133,9 +133,6 @@ async def on_message(message):
                                 await client.send_message(message.channel, "[-] Exiting!")
                                 Servers[message.server.id].players = []
                                 Servers[message.server.id].game = ""
-                                with open("servers.bak", "r") as file:
-                                    pickle.dumps(Servers, file)
-                                b = True
                         else:
                                 await client.send_message(message.channel, "[-] Baad Option!")
                                 b = False
