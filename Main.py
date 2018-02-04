@@ -36,8 +36,8 @@ async def changeStatus(status):
 @client.event
 async def on_ready():
     await changeStatus("Waiting for players to Join!")
-    with open("servers.bak","r") as file:
-        Servers = pickle.load(file)
+    with open("servers.bak","r+") as file:
+        Servers = pickle.load(file=file)
 
     await client.send_message("404046560322781188", """
     |+-----------------------------------------------------------------------+|    
