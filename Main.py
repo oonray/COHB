@@ -65,8 +65,6 @@ async def on_message(message):
     if message.channel not in channel:
         log(message.channel.id)
 
-    error_log(message.server)
-
     try:
         if message.server.id not in Servers.keys():
                     Servers[message.server.id] = Game_Server({
