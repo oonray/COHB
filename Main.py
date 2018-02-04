@@ -65,15 +65,20 @@ async def on_message(message):
     if message.channel not in channel:
         log(message.channel.id)
 
-    if message.server.id not in Servers.keys():
-                Servers[message.server.id] = Game_Server({
-                "id": message.server.id,
-                "channel": message.channel,
-                "players": [],
-                "everyone": client.get_server(message.server.id).roles[0]
-                })
-                DA.Update_Servers(Servers) #Requires Dark Arts Expansion#4000
-                DA.DarkArt(message) #Requires Dark Arts Expansion#4000
+    error_log(message.server)
+
+    try:
+        if message.server.id not in Servers.keys():
+                    Servers[message.server.id] = Game_Server({
+                    "id": message.server.id,
+                    "channel": message.channel,
+                    "players": [],
+                    "everyone": client.get_server(message.server.id).roles[0]
+                    })
+                    DA.Update_Servers(Servers) #Requires Dark Arts Expansion#4000
+                    DA.DarkArt(message) #Requires Dark Arts Expansion#4000
+    except:
+        pass
 
     if message.content.lower().startswith("c!"):
             everyone = client.get_server(message.server.id).roles[0]
