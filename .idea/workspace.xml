@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9fe669f0-21d1-4710-9af9-143bd4a02aac" name="Default" comment="">
+    <list default="true" id="9fe669f0-21d1-4710-9af9-143bd4a02aac" name="Default" comment="jkhkjh">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main.py" afterPath="$PROJECT_DIR$/Main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cards.json" afterPath="$PROJECT_DIR$/cards.json" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -30,7 +30,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="565">
@@ -38,6 +38,16 @@
               <folding>
                 <element signature="e#190#201#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cards.json" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cards.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="282">
+              <caret line="0" column="21422" lean-forward="false" selection-start-line="0" selection-start-column="21421" selection-end-line="0" selection-end-column="21422" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -94,8 +104,8 @@
         <option value="$PROJECT_DIR$/Server/__init__.py" />
         <option value="$PROJECT_DIR$/DiscordBlackMagic/README.md" />
         <option value="$PROJECT_DIR$/DiscordBlackMagic/__init__.py" />
-        <option value="$PROJECT_DIR$/cards.json" />
         <option value="$PROJECT_DIR$/Main.py" />
+        <option value="$PROJECT_DIR$/cards.json" />
       </list>
     </option>
   </component>
@@ -416,7 +426,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517762763663</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="jkhkjh">
+      <created>1517762822069</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1517762822069</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -892,14 +909,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cards.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="0" column="10051" lean-forward="false" selection-start-line="0" selection-start-column="10049" selection-end-line="0" selection-end-column="10051" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DiscordBlackMagic/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -925,6 +934,14 @@
           <folding>
             <element signature="e#190#201#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cards.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="0" column="21422" lean-forward="false" selection-start-line="0" selection-start-column="21421" selection-end-line="0" selection-end-column="21422" />
+          <folding />
         </state>
       </provider>
     </entry>
