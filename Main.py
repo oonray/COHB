@@ -58,7 +58,9 @@ async def on_ready():
     """)
     except Exception as e:
         with open("error.log", "a") as file:
+            file.write("\n")
             file.write("-" * 50)
+            file.write("\n")
             file.write(str(e))
 
 
@@ -162,7 +164,9 @@ async def on_message(message):
                 await client.send_message(Servers[message.server.id].channel, out)
     except Exception as e:
         with open("error.log","a") as file:
+            file.write("\n")
             file.write("-"*50)
+            file.write("\n")
             file.write(str(e))
 
 
