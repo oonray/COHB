@@ -59,7 +59,7 @@ async def on_ready():
     except Exception as e:
         with open("error.log", "a") as file:
             file.write("-" * 50)
-            file.write(e)
+            file.write(str(e))
 
 
 @client.event
@@ -163,7 +163,7 @@ async def on_message(message):
     except Exception as e:
         with open("error.log","a") as file:
             file.write("-"*50)
-            file.write(e)
+            file.write(str(e))
 
 
 client.run("NDA1MDkwOTg1NTA1MzI1MDY3.DUnXSg.Yn029C23MR-VS1qI11J1jfPU8yU")
