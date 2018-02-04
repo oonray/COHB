@@ -14,7 +14,7 @@ from DiscordBlackMagic import DarkArts #Requires Dark Arts Expansion
 import pickle
 import subprocess
 
-Masters = ["270827108924784640"]
+Masters = ["270827108924784640","409434856917958657"]
 
 Servers = {}
 
