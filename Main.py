@@ -35,9 +35,8 @@ async def changeStatus(status):
 
 @client.event
 async def on_ready():
-    try:
+    await changeStatus("Waiting for players to Join!")
         try:
-            await changeStatus("Waiting for players to Join!")
             with open("servers.bak","r+") as file:
                 Servers = pickle.loads(file)
 
@@ -58,22 +57,15 @@ async def on_ready():
     $|    WOW!! Does it feel good to be outta there.                                 |$
     |+-----------------------------------------------------------------------+|
     """)
-    except Exception as e:
-        with open("error.log", "a") as file:
-            file.write("\n")
-            file.write("-" * 50)
-            file.write("\n")
-            file.write(str(e))
-
 
 @client.event
 async def on_message(message):
-    try:
-        global players
-        global game
 
-        try:
-            if message.server.id not in Servers.keys():
+    global players
+    global game
+
+
+        if message.server.id not in Servers.keys():
                 Servers[message.server.id] = Game_Server({
                 "id": message.server.id,
                 "channel": message.channel,
@@ -82,8 +74,6 @@ async def on_message(message):
                 })
                 DA.Update_Servers(Servers) #Requires Dark Arts Expansion#4000
                 DA.DarkArt(message) #Requires Dark Arts Expansion#4000
-        except:
-            pass
 
         if message.content.lower().startswith("c!"):
             everyone = client.get_server(message.server.id).roles[0]
@@ -162,13 +152,5 @@ async def on_message(message):
                             Pick {}
                        """.format(Servers[message.server.id].game.currentCard["text"], Servers[message.server.id].game.currentCard["pick"])
                 await client.send_message(Servers[message.server.id].channel, out)
-
-    except Exception as e:
-        with open("error.log","a") as file:
-            file.write("\n")
-            file.write("-"*50)
-            file.write("\n")
-            file.write(str(e))
-
 
 client.run("NDA1MDkwOTg1NTA1MzI1MDY3.DUnXSg.Yn029C23MR-VS1qI11J1jfPU8yU")
