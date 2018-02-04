@@ -36,17 +36,19 @@ async def changeStatus(status):
 @client.event
 async def on_ready():
     try:
-        await changeStatus("Waiting for players to Join!")
-        with open("servers.bak","r+") as file:
-            Servers = pickle.loads(file)
+        try:
+            await changeStatus("Waiting for players to Join!")
+            with open("servers.bak","r+") as file:
+                Servers = pickle.loads(file)
 
-        await client.send_message("404046560322781188", """
-        |+-----------------------------------------------------------------------+|    
-        $|    Oy! Ten thousand years will give you such a crick in the neck.|$
-        $|    WOW!! Does it feel good to be outta there.                                 |$
-        |+-----------------------------------------------------------------------+|
-        """)
-
+            await client.send_message("404046560322781188", """
+            |+-----------------------------------------------------------------------+|    
+            $|    Oy! Ten thousand years will give you such a crick in the neck.|$
+            $|    WOW!! Does it feel good to be outta there.                                 |$
+            |+-----------------------------------------------------------------------+|
+            """)
+        except:
+            Servers = {}
 
         for i in Servers:
             if i.channel not in channel:
@@ -69,8 +71,6 @@ async def on_message(message):
     try:
         global players
         global game
-
-
 
         try:
             if message.server.id not in Servers.keys():
@@ -162,6 +162,7 @@ async def on_message(message):
                             Pick {}
                        """.format(Servers[message.server.id].game.currentCard["text"], Servers[message.server.id].game.currentCard["pick"])
                 await client.send_message(Servers[message.server.id].channel, out)
+
     except Exception as e:
         with open("error.log","a") as file:
             file.write("\n")
