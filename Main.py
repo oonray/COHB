@@ -24,6 +24,15 @@ client = discord.Client()
 
 channel = ["404046560322781188"]
 
+def log(inp):
+    with open("logfile.log","a") as file:
+        file.write(inp+"\n")
+
+def error_log(inp):
+    with open("error.log","a") as file:
+        file.write(inp + "\n")
+
+
 def number(num):
     if "1" in num.content.lower() or "2" in num.content.lower() or "3" in num.content.lower():
         return True
@@ -36,34 +45,21 @@ async def changeStatus(status):
 @client.event
 async def on_ready():
     await changeStatus("Waiting for players to Join!")
-    try:
-        with open("servers.bak","r+") as file:
-                Servers = pickle.loads(file)
-    except:
-        Servers = {}
-
-    await client.send_message(client.get_channel("404046560322781188"), """
-            |+-----------------------------------------------------------------------+|    
-            $|    Oy! Ten thousand years will give you such a crick in the neck.|$
-            $|    WOW!! Does it feel good to be outta there.                                 |$
-            |+-----------------------------------------------------------------------+|
-            """)
-
-    for i in Servers:
-            if i.channel not in channel:
-                await client.send_message(i.channel,"""
-    |+-----------------------------------------------------------------------+|    
-    $|    Oy! Ten thousand years will give you such a crick in the neck.|$
-    $|    WOW!! Does it feel good to be outta there.                                 |$
-    |+-----------------------------------------------------------------------+|
-    """)
-
+    for i in channel:
+        await client.send_message(client.get_channel(i), """
+                |+-----------------------------------------------------------------------+|    
+                $|    Oy! Ten thousand years will give you such a crick in the neck.|$
+                $|    WOW!! Does it feel good to be outta there.                                 |$
+                |+-----------------------------------------------------------------------+|
+                """)
 @client.event
 async def on_message(message):
 
     global players
     global game
 
+    if message.channel not in channel:
+        log(message.channel)
 
     if message.server.id not in Servers.keys():
                 Servers[message.server.id] = Game_Server({
@@ -78,6 +74,7 @@ async def on_message(message):
     if message.content.lower().startswith("c!"):
             everyone = client.get_server(message.server.id).roles[0]
             server = message.server
+
             if "join" in message.content.lower():
                 Servers[server.id].players.append(message.author)
                 await client.send_message(message.channel, "+-------------------------------------+")
@@ -97,6 +94,7 @@ async def on_message(message):
 
                     for i in Servers[message.server.id].players:
                             await client.send_message(Servers[message.server.id].channel,i.mention)
+
                     Servers[message.server.id].start_Game()
                     while True:
                         await client.send_message(message.channel, """+-------------------------------------+
@@ -141,7 +139,7 @@ async def on_message(message):
 
             if "reboot" in message.content.lower():
                 if message.author in Masters:
-                    subprocess.Popen("Python3","./Main.py")
+                    subprocess.Popen("Python3.6","./Main.py")
                     exit()
 
             if "card" in message.content.lower():
