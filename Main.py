@@ -36,7 +36,8 @@ async def changeStatus(status):
 @client.event
 async def on_ready():
     await changeStatus("Waiting for players to Join!")
-    Servers = pickle.load("servers.bak")
+    with open("servers.bak","r") as file:
+        Servers = pickle.load(file)
 
     await client.send_message("404046560322781188", """
     |+-----------------------------------------------------------------------+|    
@@ -130,7 +131,8 @@ async def on_message(message):
                                 await client.send_message(message.channel, "[-] Exiting!")
                                 Servers[message.server.id].players = []
                                 Servers[message.server.id].game = ""
-                                pickle.dump(Servers,"servers.bak")
+                                with open("servers.bak", "r") as file:
+                                    pickle.dump(Servers, file)
                                 b = True
                         else:
                                 await client.send_message(message.channel, "[-] Baad Option!")
