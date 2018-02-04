@@ -84,8 +84,9 @@ class Game:
                     +-------------------------------------+
                     New message from: {} use {} before command to respond 
                     Hello {}!
-                    My options are: "Cards", "Black" or "Submit" followed by a <number>
+                    My options are: "Cards", "Black", "Status" or "Submit" followed by a <number>
                         Black: shows black card of server
+                        Status: gets the servers waiting for you
                         Cards: Shows cards on server
                         Submit: Sends the numbered card to me
                     """.format(client.get_server(self.serverid).name,
@@ -95,15 +96,23 @@ class Game:
                     await client.send_message(i,options)
 
                     response = await client.wait_for_message(author=i)
+
+                    if "status" in response.content.lower():
+                        if i.name in response.author.name:
+                            await client.send_message(response.author,"""
+                            {} is waiting for your response
+                            Options are: "Cards", "Black", "Status" or "Submit" followed by a <number>
+                            """.format(self.serverName))
+
                     if self.serverName.lower() in response.content.lower():
                             if "cards" in response.content.lower():
                                 await self.checkCards(i,client,channel)
-                            if "black" in response.content.lower():
+                            elif "black" in response.content.lower():
                                 await client.send_message(i,"{} , Pick {}".format(self.currentCard["text"],self.currentCard["pick"]))
                             elif "submit" in response.content.lower():
                                 resp = response.content.split()
                                 if len(resp[-1]) > 0:
-                                    await self.submit(resp[2:],client,i)
+                                    await self.submit(resp[-self.currentCard["pick"]:],client,i)
                                     break
 
        for i,x in zip(self.players,range(len(self.players))):
@@ -126,8 +135,12 @@ class Game:
 
        """if the votes are tied, rince and repeat"""
        winners = max(contestants, key=contestants.get)
-       for i in contestants.keys():
-           if contestants[i] >= contestants[winners]:
+       if contestants[winners] == sum([ contestants[i] for i in contestants.keys()])/len(contestants.keys()):
+            for i in contestants.keys():
+                self.players[i].points += 1
+       else:
+        for i in contestants.keys():
+           if contestants[i] == contestants[winners]:
             await client.send_message(channel,"A Point goes to {}".format(i))
             self.players[i].points += 1
 
@@ -165,12 +178,23 @@ class Game:
         return contestants
 
     async def submit(self,x,client,channel):
-        print(x)
         x_prime = []
         cards = []
         """
         Making shure all picks have been picked.
         """
+        if not int(x[0]) in range(10):
+            if x == "":
+                await client.send_message(channel,"Please enter the card(s) you want to submit:")
+                x = await client.wait_for_message(author=channel)
+                x = x.split()
+                x_prime = x[0] if len(x) == 1 else [x_prime.append(i) for i in x]
+            else:
+                if len(x) < self.currentCard["pick"]:
+                    await client.send_message(channel, "Please enter another card you want to submit:")
+                    x = await client.wait_for_message(author=channel)
+                    x_prime.append(int(x.content))
+
         if type(x) != list:
             if x == "":
                 await client.send_message(channel,"Please enter the card(s) you want to submit:")
@@ -184,25 +208,23 @@ class Game:
                     x_prime.append(int(x.content))
 
         while (len(x_prime)+1) < self.currentCard["pick"]:
-            print(len(x_prime))
-            print(type(x))
             if type(x) != list:
                 if x == "":
                         await client.send_message(channel, "Please enter another card you want to submit:")
                         x = await client.wait_for_message(author=channel)
-                        x = x.content.split()
+                        x = x.content.split()[2:]
                         x_prime = x[0] if len(x) == 1 else [x_prime.append(i) for i in x]
                 else:
                     if len(x) < self.currentCard["pick"]:
                         await client.send_message(channel, "Please enter another card you want to submit:")
                         x = await client.wait_for_message(author=channel)
-                        x = x.content.split()
+                        x = x.content.split()[2:]
                         x_prime = x[0] if len(x) == 1 else [x_prime.append(i) for i in x]
             else:
                 if len(x)< self.currentCard["pick"]:
                     await client.send_message(channel, "Please enter another card you want to submit:")
                     x = await client.wait_for_message(author=channel)
-                    x = x.content.split()
+                    x = x.content.split()[2:]
                     x_prime = x[0] if len(x) == 1 else [x_prime.append(i) for i in x]
                 else:
                     for i in x:
